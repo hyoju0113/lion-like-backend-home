@@ -36,7 +36,7 @@ def signup(db: Session, request: SignupRequest):
     new_user = User(
         email=request.email,
         username=request.username,
-        password=request.password,
+        password_hash=request.password,
         nickname=request.nickname,
     )
     return user_repo.create_user(db, new_user)
@@ -52,7 +52,7 @@ def login(db: Session, request: LoginRequest):
     """
     user = user_repo.get_user_by_email(db, request.email)
 
-    if not user or user.password != request.password:
+    if not user or user.password_hash != request.password:
         raise ValueError("이메일 또는 비밀번호가 올바르지 않습니다")
 
     return {"user_id": user.id}
